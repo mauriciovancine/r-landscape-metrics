@@ -1,0 +1,1147 @@
+---
+title: "Introdução à análise geoespacial com R <br><br><br>"
+subtitle: "5 Estrutura e fonte de dados geoespaciais <br><br><br>"
+author: "Maurício H. Vancine <br> Milton C. Ribeiro"
+date: "21/10/2020"
+output:
+  xaringan::moon_reader:
+    css: [metropolis, metropolis-fonts]
+    lib_dir: libs
+    nature:
+      highlightStyle: rainbow
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE, encoding = "UTF-8")
+knitr::opts_chunk$set(fig.retina = 3, warning = FALSE, message = FALSE)
+```
+
+class: clear
+background-image: url(img/general_sig.jpg)
+background-size: 400px
+
+---
+
+background-image: url(img/general_sig.jpg)
+background-size: 270px
+background-position: 90% 80%
+
+# 5 Estrutura de dados geoespaciais
+
+## Tópicos
+1. Geoprocessamento
+1. Cartografia
+1. GPS
+1. Sensoriamento Remoto
+1. Sistema de Informação Geográfica (SIG)
+1. Dados geoespaciais
+1. Dados vetoriais 
+1. Tabela de atributos
+1. Formato de arquivos vetoriais
+1. Dados matriciais
+1. Formatos de arquivos matriciais
+1. Banco de dados geoespaciais
+1. Conversão de dados geosespaciais
+1. Repositórios de dados geoespaciais
+1. Material para análise de dados geoespacias
+
+---
+
+background-image: url(img/cover_geoprocessamento.jpg)
+background-size: 250px
+background-position: 50% 65%
+
+# 5.1 Geoprocessamento
+
+## Livos
+
+### Geoprocessamento sem complicação (2008)
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://www.ofitexto.com.br/livro/geoprocessamento-sem-complicacao/
+
+---
+
+background-image: url(img/cover_qgis_abc.jpg),url(img/cover_qgis_geoprocessamento.jpg)
+background-size: 250px,250px
+background-position: 25% 65%,75% 65%
+
+# 5.1 Geoprocessamento
+
+## Livos
+
+### QGIS ABC ao XYZ | QGIS e geoprocessamento na prática
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://ecojustus.com.br/livros
+
+---
+
+background-image: url(img/cover_explorando_qgis.png)
+background-size: 280px
+background-position: 50% 65%
+
+# 5.1 Geoprocessamento
+
+## Livos
+
+### Explorando o QGIS 3.X (2020)
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://github.com/anadallacorte/LIVROQGIS2020
+
+---
+
+background-image: url(img/geo_geoprocessing02.png)
+background-size: 800px
+background-position: 50% 50%
+
+# 5.1 Geoprocessamento
+
+## Leitura
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+*[http://www.ufrrj.br/lga/tiagomarino/artigos/oqueegeoprocessamento.pdf]
+
+---
+
+background-image: url(img/general_information.jpeg)
+background-size: 400px
+background-position: 50% 50%
+
+# 5.1 Geoprocessamento
+
+## Resumo da leitura
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+*[http://www.ufrrj.br/lga/tiagomarino/artigos/oqueegeoprocessamento.pdf]
+
+---
+
+background-image: url(img/geo_geotec_geoprocess01.png)
+background-size: 380px
+background-position: 50% 95%
+
+# 5.1 Geoprocessamento
+
+## Engloba quatro Geotecnologias:
+
+### 1. Cartografia digital (CD)
+
+### 2. Global Positioning System (GPS)
+
+### 3. Sensoriamento Remoto (RS)
+
+### 4. Sistemas de Informações Geográficas (SIG)
+
+---
+
+background-image: url(img/geo_geotec_geoprocess02.png)
+background-size: 800px
+background-position: 50% 60%
+
+# 5.1 Geoprocessamento
+
+## Gerar informações para tomada de decisões
+
+---
+
+background-image: url(img/geo_geotec_geoprocess03.png)
+background-size: 800px
+background-position: 50% 60%
+
+# 5.1 Geoprocessamento
+
+## Gerar informações para tomada de decisões
+
+---
+
+background-image: url(img/geo_geoprocessing03.png),url(img/geo_geoprocessing04.jpg)
+background-size: 300px,600px
+background-position: 50% 18%,50% 108%
+
+# 5.1 Geoprocessamento
+
+## Gerar informações para tomada de decisões
+
+---
+
+class: inverse, center, middle
+# Cartografia
+
+---
+
+background-image: url(img/geo_cartografia.jpg)
+background-size: 400px
+background-position: 80% 85%
+
+# 5.2 Cartografia
+
+## Conceitos
+
+### 1. Escala
+
+### 2. Sistemas de coordenadas 
+
+### 3. Datum
+
+---
+
+# 5.2 Cartografia
+
+## Escala
+
+### **Relação** entre a **medida de um objeto ou lugar** representado no papel (medida gráfica) e sua **medida real**
+
+--
+
+<br>
+
+### **D (distância real)**: 250 m
+### **d (distância gráfica)**: 0.01 m (1 cm)
+
+<br>
+
+--
+
+### Fazendo D/d = 250/0.01 = 25000, i.e., **reduzimos a realidade 25000 vezes**
+
+---
+
+# 5.2 Cartografia
+
+## Escala
+
+### **Relação** entre a **medida de um objeto ou lugar** representado no papel (medida gráfica) e sua **medida real**
+
+<br>
+
+### **D (distância real)**: 250 m
+### **d (distância gráfica)**: 0.01 m (1 cm)
+### **T (título da escala)**: indica a **quantidade de vezes** que cada unidade gráfica (papel) representa da medida real
+
+<br>
+
+### T = D/d = 250/0.01 = 25000
+
+---
+
+background-image: url(img/geo_scale_bar.png)
+background-size: 300px
+background-position: 50% 93%
+
+# 5.2 Cartografia
+
+## Escala
+
+### Dessa forma, **1 cm do papel** equivale a **25000 cm (ou 250 metros)** na medida real
+
+--
+
+### A escala (**E**) é a relação entre uma **(1) unidade da medida gráfica** e **T unidades da medida real**
+
+### E = 1/T
+
+--
+
+### Logo, a **escala** é de 1/25000 ou 1:25000
+
+---
+
+background-image: url(img/geo_geographic.png)
+background-size: 600px
+background-position: 50% 80%
+
+# 5.2 Cartografia
+
+## Sistemas de coordenadas 
+
+### Geográficas (graus)
+
+---
+
+background-image: url(img/geo_geographic.png)
+background-size: 500px
+background-position: 85% 60%
+
+# 5.2 Cartografia
+
+## Sistemas de coordenadas 
+
+### Geográficas (graus)
+
+<br>
+
+**1. Graus, minutos e segundos**
+- Longitude: 42°42’42”O
+- Latitude: 23°23’23”S
+
+**2. Graus decimais**
+- Longitude: -42.71167
+- Latitude: -23.38972
+
+<br>
+
+**Conversão**: 42 + (42/60) + (42/3600) = 42.71167 <br>
+**Conversão**: 23 + (23/60) + (23/3600) = 23.38972
+
+---
+
+background-image: url(img/geo_projection_families01.png),url(img/geo_projection_families02.jpg)
+background-size: 400px,300px
+background-position: 15% 75%,90% 75%
+
+# 5.2 Cartografia
+
+## Sistemas de coordenadas 
+
+### Projetadas (metros)
+
+---
+
+background-image: url(img/geo_utm_zones.png)
+background-size: 700px
+background-position: 50% 75%
+
+# 5.2 Cartografia
+
+## Sistemas de coordenadas 
+
+### Projetadas (metros) - UTM
+
+---
+
+background-image: url(img/geo_utm_coords.png)
+background-size: 450px
+background-position: 70% 85%
+
+# 5.2 Cartografia
+
+## Sistemas de coordenadas 
+
+### Projetadas (metros) - UTM
+
+**1. Zona e metros**
+- X UTM: 733876 m E
+- Y UTM: 7411482 m S
+- Zona: 23K
+
+---
+
+background-image: url(img/geo_geoide.jpg)
+background-size: 600px
+background-position: 50% 70%
+
+# 5.2 Cartografia
+
+## Sistemas de referências (Datum)
+
+### Geoide
+
+---
+
+background-image: url(img/geo_geoide_elipsoide.png)
+background-size: 900px
+background-position: 50% 80%
+
+# 5.2 Cartografia
+
+## Sistemas de referências (Datum)
+
+### Geoide, esferoide e elipsoide
+
+---
+
+background-image: url(img/geo_geoide_elipsoide.png),url(img/geo_datum02.png)
+background-size: 600px,600px
+background-position: 50% 90%,50% 40%
+
+# 5.2 Cartografia
+
+## Sistemas de referências (Datum)
+
+### Datum
+
+---
+
+background-image: url(img/geo_datum01.jpeg)
+background-size: 600px
+background-position: 85% 45%
+
+# 5.2 Cartografia
+
+## Sistemas de referências (Datum)
+
+<br>
+
+**1. Geocêntricos**
+- WGS 84
+- SIRGAS 2000
+
+<br>
+
+**2. Topocêntricos**
+- SAD 69
+- Córrego Alegre
+
+### **Conversão**: não é trival e requer muita trigonometria - feita por computador
+
+---
+
+background-image: url(img/geo_datum_sad_sirgas.jpg)
+background-size: 500px
+background-position: 75% 55%
+
+# 5.2 Cartografia
+
+## Sistemas de referências (Datum)
+
+<br>
+
+**1. Geocêntricos**
+- SIRGAS 2000
+
+<br>
+
+**2. Topocêntricos**
+- SAD 69
+
+<br><br><br>
+
+### **Diferença**: cerca de 60 m
+
+---
+
+background-image: url(img/geo_src.png)
+background-size: 500px
+background-position: 50% 99%
+
+# 5.2 Cartografia
+
+## Sistemas de referências de coordenadas (SRC)
+
+### O SRC é composto de quatro componentes
+
+1. **Sistema de coordenadas**: grade X e Y, na qual os dados são sobrepostos e como um ponto está localizado no espaço
+1. **Unidades horizontais e verticais**: unidades usadas para definir a grade ao longo dos eixos X, Y (e Z)
+1. **Datum**: versão modelada da forma da Terra que define a origem usada para colocar o sistema de coordenadas no espaço
+1. **Informações de projeção**: equação matemática usada para nivelar objetos que estão em uma superfície redonda para visualização em uma superfície plana
+
+---
+
+background-image: url(img/geo_src.png)
+background-size: 500px
+background-position: 95% 50%
+
+# 5.2 Cartografia
+
+## Sistemas de referências de coordenadas (SRC)
+
+<br>
+
+**Coordenadas geográficas**
+- 23°23’23”S 42°42’42”O; WGS 84
+- 23°23’23”S 42°42’42”O; SIRGAS 2000
+- -23.38972, -42.71167; WGS 84
+
+<br>
+
+**Coordenadas projetadas (UTM)**
+- 23K 733876E, 7411482S; WGS 84
+- 23K 733876E, 7411482S; SIRGAS 2000
+
+---
+
+class: inverse, center, middle
+
+# Para facilitar o trabalho com CRSs, existem códigos numéricos para cada SRC
+
+---
+
+background-image: url(img/geo_epsg.png)
+background-size: 1000px
+background-position: 50% 80%
+
+# 5.2 Cartografia
+
+## EPSG (*European Petroleum Survey Group*)
+
+### Possui códigos numéricos para quase todos os CRSs
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+*[https://epsg.io/]
+
+---
+
+# 5.2 Cartografia
+
+## EPSG (*European Petroleum Survey Group*)
+
+<br><br><br>
+
+### EPSG:4326 [SRC Geográfico Datum WGS 84](https://epsg.io/4326)
+
+### EPSG:4674 [SRC Geográfico Datum SIRGAS 2000](https://epsg.io/4674)
+
+### EPSG:32723 [SRC UTM 25L Datum WGS 84](https://epsg.io/32723)
+
+<br><br><br><br>
+
+*[https://epsg.io/]
+
+---
+
+class: inverse, center, middle
+# GPS
+
+---
+
+background-image: url(img/geo_gps.png)
+background-size: 700px
+background-position: 50% 80%
+
+# 5.3 GPS (Global Positioning System)
+
+## Indica sua localização no planeta
+
+### 3 satélites - localização
+### 4 satélites - altitude
+
+---
+
+background-image: url(img/geo_kml_gpx.png)
+background-size: 250px
+background-position: 50% 80%
+
+# 5.3 GPS (Global Positioning System)
+
+## Formatos
+
+**1. Formato de saída (.gpx)**: formato XML leve para transferência de dados de GPS (waypoints, rotas e trilhas), usado em aparelhos, como Garmin, dentre outros
+
+**2. Formato do google earth (.kml ou .kmz)**: linguagem XML focada em visualização geográfica, incluindo anotações de mapas e imagens, usado para exibir dados geográficos no Google Earth e/ou Google Maps
+
+<br><br><br><br><br><br><br><br>
+
+**Conversão**: https://kml2gpx.com/
+
+---
+
+background-image: url(img/geo_gps_way_rout_track.png), url(img/geo_gps_aparelho.jpg)
+background-size: 250px, 400px
+background-position: 20% 95%, 80% 85%
+
+# 5.3 GPS (Global Positioning System)
+
+## Tipos de dados em GPSs
+
+**1. Waypoints**: **ponto de interesse**, contendo longitude e latitude, além de informações como elevação, nome, descrição, etc.
+
+**2. Rotas**: sequência de waypoints, representa uma **sugestão da trajetória** entre os waypoints
+
+**3. Trilhas**: sequência de trackpoints, representa a **trajetória percorrida**
+
+---
+
+class: inverse, center, middle
+# Sensoriamento Remoto
+
+---
+
+background-image: url(img/geo_rs.jpg)
+background-size: 500px
+background-position: 80% 70%
+
+# 5.4 Sensoriamento Remoto
+
+## Conceitos
+
+<br>
+
+### 1. Bandas
+### 2. Satélites
+### 3. Resoluções
+### 4. Aplicações
+
+---
+
+background-image: url(img/geo_rs_spectrum.png)
+background-size: 800px
+background-position: 50% 70%
+
+# 5.4 Sensoriamento Remoto
+
+## 1. Bandas
+
+### Espectro eletromagnético e bandas
+
+---
+
+background-image: url(img/geo_rs_response.png)
+background-size: 800px
+background-position: 50% 80%
+
+# 5.4 Sensoriamento Remoto
+
+## 1. Bandas
+
+### Respostas espectrais
+
+---
+
+background-image: url(img/geo_rs_satelites01.png)
+background-size: 500px
+background-position: 80% 65%
+
+# 5.4 Sensoriamento Remoto
+
+## 2. Satélites
+
+### 1. Landsat (1-8)
+### 2. Sentinel (1-3)
+### 3. MODIS
+
+<br><br><br><br><br><br><br><br>
+
+[*] https://webapps.itc.utwente.nl/sensor/default.aspx?view=searchsat
+
+---
+
+background-image: url(img/geo_rs_satelites02.png),url(img/geo_rs_satelites03.png)
+background-size: 700px,500px
+background-position: 50% 30%,50% 98%
+
+# 5.4 Sensoriamento Remoto
+
+## 2. Satélites - outros remotos
+
+---
+
+background-image: url(img/geo_rs_spectrum_satelites.jpg)
+background-size: 800px
+background-position: 50% 65%
+
+# 5.4 Sensoriamento Remoto
+
+## 2. Satélites - bandas
+
+---
+
+background-image: url(img/geo_rs_spectrum_satelites_landsat.png)
+background-size: 800px
+background-position: 50% 65%
+
+# 5.4 Sensoriamento Remoto
+
+## 2. Satélites - bandas - landsat
+
+
+---
+
+background-image: url(img/geo_rs_res_spatial.png)
+background-size: 400px
+background-position: 50% 90%
+
+# 5.4 Sensoriamento Remoto
+
+## 3. Resoluções
+
+### 1. Resolução espacial
+
+---
+
+background-image: url(img/geo_rs_res_temporal.png)
+background-size: 500px
+background-position: 50% 80%
+
+# 5.4 Sensoriamento Remoto
+
+## 3. Resoluções
+
+### 2. Resolução temporal
+
+---
+
+background-image: url(img/geo_rs_res_spectral.png)
+background-size: 350px
+background-position: 50% 90%
+
+# 5.4 Sensoriamento Remoto
+
+## 3. Resoluções
+
+### 3. Resolução espectral
+
+---
+
+background-image: url(img/geo_rs_res_radio.png)
+background-size: 500px
+background-position: 50% 70%
+
+# 5.4 Sensoriamento Remoto
+
+## 3. Resoluções
+
+### 4. Resolução radiométrica
+
+---
+
+background-image: url(img/geo_rs_class.gif)
+background-size: 450px
+background-position: 50% 95%
+
+# 5.4 Sensoriamento Remoto
+
+## 4. Aplicações
+
+1. Mapeamento do uso e cobertura da terra
+1. Características do solo
+1. Características da vegetação (agricultura)
+1. Relevo (topografia, declividade, curvas de nível)
+1. Hidrografia (rios e limites de bacias)
+1. Balanço de energia na superfície
+1. Monitoramento de queimadas
+1. Monitoramento de desmatamentos
+
+---
+
+class: inverse, center, middle
+
+# Sistema de Informação Geográfica
+
+---
+
+background-image: url(img/geo_sig01.png),url(img/geo_sig02.png)
+background-size: 350px,550px
+background-position: 7% 30%,90% 90%
+
+# 5.5 Sistema de Informação Geográfica
+
+## Composto por vários elementos e tecnologias
+
+---
+
+background-image: url(img/geo_sig03.png),url(img/geo_sig04.jpeg),url(img/geo_sig05.png)
+background-size: 800px,350px,300px
+background-position: 50% 20%,10% 105%,80% 90%
+
+# 5.5 Sistema de Informação Geográfica
+
+## Integração das informações espaciais
+
+---
+
+background-image: url(img/geo_sig_softwares.png)
+background-size: 600px
+background-position: 45% 70%
+
+# 5.5 Sistema de Informação Geográfica
+
+## Softwares
+
+---
+
+class: inverse, center, middle
+# Dados geoespaciais
+
+---
+
+background-image: url(img/geo_data.jpg)
+background-size: 550px
+background-position: 45% 80%
+
+# 5.6 Dados geoespaciais
+
+## Tipos de dados
+
+---
+
+background-image: url(img/geo_vector_data.png)
+background-size: 500px
+background-position: 45% 80%
+
+# 5.7 Dados vetoriais
+
+## Ponto, linha e polígono
+
+---
+
+background-image: url(img/geo_vector_attribute_table.png)
+background-size: 550px
+background-position: 45% 80%
+
+# 5.8 Tabela de atributos
+
+## Relação entre a geometria e suas características
+
+---
+
+background-image: url(img/geo_shp_logo.png),url(img/geo_shp_formats.png)
+background-size: 150px,650px
+background-position: 95% 5%,50% 90%
+
+# 5.9 Formato de arquivos vetoriais
+
+## Shapefile
+
+### Formato fechado de arquivos vetoriais
+
+#### **.shp**: contém as informações da feição (desenho)
+#### **.dbf**: tabela que contém as informação (colunas) sobre cada feição (linhas)
+#### **.shx**: arquivo de índice que une o .shp ao .dbf
+#### **.prj**: contém as informações do sistema de referências de coordenadas
+
+---
+
+background-image: url(img/geo_raster.png)
+background-size: 550px
+background-position: 45% 80%
+
+# 5.10 Dados matriciais
+
+## Gride ou raster
+
+---
+
+background-image: url(img/geo_raster_extent.png)
+background-size: 600px
+background-position: 45% 95%
+
+# 5.10 Dados matriciais
+
+## Gride ou raster
+
+### Extensão
+
+---
+
+background-image: url(img/geo_raster_resolution.png)
+background-size: 700px
+background-position: 55% 70%
+
+# 5.10 Dados matriciais
+
+## Gride ou raster
+
+### Resolução
+
+---
+
+background-image: url(img/geo_raster_resolution_diff.png)
+background-size: 900px
+background-position: 45% 95%
+
+# 5.10 Dados matriciais
+
+## Gride ou raster
+
+### Resolução
+#### - **menor resolução** -> **maior** tamanho do pixel
+#### - **maior resolução** -> **menor** tamanho do pixel
+
+---
+
+background-image: url(img/geo_geotiff_logo.png)
+background-size: 500px
+background-position: 95% 60%
+
+# 5.11 Formatos de arquivos matriciais
+
+## GeoTiff e BIL
+
+### Formatos abertos de arquivos matriciais georreferenciados
+
+<br>
+
+### **.tif**: arquivo matricial georreferenciamento com informações de georreferenciamento
+
+<br><br>
+
+### **.bil**: arquivo matricial
+### **.hdr**:  contém as informações do sistema de referências de coordenadas
+
+---
+
+background-image: url(img/geo_geopackage.png)
+background-size: 600px
+background-position: 50% 90%
+
+# 5.12 Banco de dados geoespaciais
+
+## Geopackage
+
+### Formato aberto para armazenamento de dados espaciais
+
+<br>
+
+#### **.gpkg**: armazena dados vetoriais, matriciais, metadados, dados alfanuméricos, entre outros aspectos internos do banco
+
+---
+
+background-image: url(img/geo_data_convert.png)
+background-size: 450px
+background-position: 45% 90%
+
+# 5.13 Conversão de dados geosespaciais
+
+## Conversão entre dados vetoriais e matriciais
+
+### É possível converter os dados vetoriais em matriciais e vice-versa
+
+---
+
+# 5.14 Repositórios de dados geoespaciais
+
+## Vetoriais
+
+<br>
+
+- **IBGE**: limites territoriais e censitários do Brasil <br>
+https://www.ibge.gov.br/geociencias/downloads-geociencias.html
+
+- **FBDS**: uso da terra, app e hidrografia - Mata Atlântica e Cerrado <br>
+http://geo.fbds.org.br/
+
+- **GeoBank**: dados geológicos do Brasil <br>
+http://geosgb.cprm.gov.br/
+
+- **GADM**: limites de áreas administrativas do mundo <br>
+https://gadm.org/
+
+- **Natural Earth:** diversos limites para o mundo <br>
+https://www.naturalearthdata.com/
+
+---
+
+# 5.14 Repositórios de dados geoespaciais
+
+## Matriciais
+
+<br>
+
+- **MapBiomas**: uso e cobertura da terra para o Brasil, diversos anos <br>
+https://mapbiomas.org
+
+- **USGS**: dados de diversos satélites livres para o mundo <br>
+https://www.usgs.gov
+
+- **SRTM**: dados de elevação para o mundo <br>
+http://srtm.csi.cgiar.org/
+
+- **WorldClim**: dados climáticos para o mundo <br>
+https://www.worldclim.org/
+
+- **EarthEnv**: dados de cobertura da terra, nuvens, relevo e hidrografia <br>
+https://www.earthenv.org/
+
+- **Global Forest Watch**: dados de uso e cobertura para todo o planeta <br>
+https://www.globalforestwatch.org/
+
+---
+
+background-image: url(img/cover_analise_espacial_r.jpg)
+background-size: 250px
+background-position: 50% 65%
+
+# 5.15 Material
+
+## Livros
+
+### **Análise espacial com R (2019)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://www.dropbox.com/s/blgtp2bmpdghol7/AnaliseEspacialComR.pdf?dl=0
+
+---
+
+background-image: url(img/cover_geocompr.png)
+background-size: 230px
+background-position: 50% 65%
+
+# 5.15 Material
+
+## Livros
+
+### **Geocomputation with R (2019)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://geocompr.robinlovelace.net/
+
+---
+
+background-image: url(img/cover_intro_r_spatial_2ed.jpg)
+background-size: 230px
+background-position: 50% 65%
+
+# 5.15 Material
+
+## Livros
+
+### **An introduction to R for spatial analysis & mapping (2019)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://bookdown.org/lexcomber/brunsdoncomber2e/
+
+---
+
+background-image: url(img/cover_remote_sensing_and_gis.jpg)
+background-size: 230px
+background-position: 50% 65%
+
+# 5.15 Material
+
+## Livros
+
+### **Remote Sensing and GIS for Ecologists (2016)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] http://book.ecosens.org/rsebook/
+
+---
+
+background-image: url(img/cover_introduction_spatial_data_analysis.jpg)
+background-size: 230px
+background-position: 50% 65%
+
+# 5.15 Material
+
+## Livros
+
+### **An Introduction to Spatial Data Analysis (2020)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] http://book.ecosens.org/gsbook/
+
+---
+
+background-image: url(img/cover_geospatial_health_data.jpg)
+background-size: 220px
+background-position: 50% 65%
+
+# 5.15 Material
+
+## Livros
+
+### **Geospatial Health Data**
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://www.paulamoraga.com/book-geospatial/
+
+---
+
+background-image: url(img/cover_data_visualization_with_r.png)
+background-size: 230px
+background-position: 50% 65%
+
+# 5.15 Material
+
+## Livros
+
+### **Data Visualization with R (2019)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://keen-swartz-3146c4.netlify.com/
+
+---
+
+background-image: url(img/cover_fundamentals_of_data_visualization.png)
+background-size: 230px
+background-position: 50% 65%
+
+# 5.15 Material
+
+## Livros
+
+### **Fundamentals of data visualization (2019)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://keen-swartz-3146c4.netlify.com/
+
+---
+
+background-image: url(img/person_edzer_pebesma.jpg)
+background-size: 230px
+background-position: 50% 65%
+
+# 5.15 Material
+
+## Livros
+
+### **Spatial Data Science (2019) - Edzer Pebesma**
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://keen-swartz-3146c4.netlify.com/
+
+---
+
+background-image: url(img/cover_intro_gis.png)
+background-size: 280px
+background-position: 50% 75%
+
+# 5.15 Material
+
+## Apostilas
+
+### **Introduction to GIS: Manipulating and Mapping Geospatial Data in R (2019)**
+
+<br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://cdn2.hubspot.net/hubfs/2287011/Atlan%20GIS%20Course/All%20lessons.pdf
+---
+
+background-image: url(img/person_robert_hijmans.jpg)
+background-size: 230px
+background-position: 50% 70%
+
+# 5.15 Material
+
+## Site
+
+### **Spatial Data Analysis and Modeling with R (2020)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] http://rspatial.org
+
+---
+
+class: inverse, middle, center
+
+# Dúvidas?
+
+---
+
+class: clear, middle
+
+## Maurício Vancine
+
+<br>
+
+Contatos:
+
+`r icon::fa_envelope(colour = "#0000ee")` [mauricio.vancine@gmail.com]()
+<br>
+`r icon::fa_twitter(colour = "#0000ee")` [@mauriciovancine](https://twitter.com/mauriciovancine)
+<br>
+`r icon::fa_github(colour = "#0000ee")` [mauriciovancine](https://mauriciovancine.netlify.com/)
+<br>
+`r icon::fa_link(colour = "#0000ee")` [mauriciovancine.netlify.com](https://mauriciovancine.netlify.com/)
+
+Slides criados via pacote [xaringan](https://github.com/yihui/xaringan) e tema [Metropolis](https://github.com/pat-s/xaringan-metropolis)

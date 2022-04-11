@@ -1,0 +1,1405 @@
+---
+title: "Introdução à análise geoespacial com R <br><br><br>"
+subtitle: "8 Produção de mapas <br><br><br>"
+author: "Maurício H. Vancine <br> Milton C. Ribeiro"
+date: "23/10/2020"
+output:
+  xaringan::moon_reader:
+    css: [metropolis, metropolis-fonts]
+    lib_dir: libs
+    nature:
+      highlightStyle: rainbow
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(fig.retina = 3, fig.align = "center", warning = FALSE, message = FALSE)
+if(!require(tidyverse)) devtools::install_github("tidyverse")
+if(!require(sf)) devtools::install_github("sf")
+if(!require(raster)) devtools::install_github("raster")
+if(!require(ggspatial)) devtools::install_github("ggspatial")
+if(!require(tmap)) devtools::install_github("tmap")
+```
+
+class: clear
+background-image: url(img/geo_map_elements.png)
+background-size: 700px
+
+---
+
+background-image: url(img/package_ggplot2.png), url(img/package_tmap.png)
+background-size: 250px, 250px
+background-position: 45% 70%, 90% 90%
+
+# 8 Produção de mapas
+
+## Conteúdo
+1. Elementos de um mapa
+1. Pacotes para produção de mapas
+1. Pacote ggplot2
+1. Pacote tmap
+1. Mapas vetoriais
+1. Mapas matriciais
+1. Mapas estáticos
+1. Mapas animados
+1. Mapas interativos
+1. Exportar mapas
+
+---
+
+# 8 Produção de mapas
+
+## Script
+
+<br><br><br><br>
+
+## .center[`08_script_intro_geocomp_r.R`]
+
+---
+
+background-image: url(img/geo_map_elements.png)
+background-size: 650px
+background-position: 90% 75%
+
+# 8.1 Elementos de um mapa
+
+## Elementos 
+
+- Títutlo
+- Mapa principal
+- Mapa secundário
+- Legenda
+- Coordenadas
+- Orientação (Norte)
+- Barra de escala
+- SRC
+- Fontes
+
+---
+
+# 8.2 Pacotes para produção de mapas
+
+## Pacotes
+
+### Principais pacotes para produção de mapas no R
+
+<br>
+
+|                                                            |                                                             |
+|------------------------------------------------------------|-------------------------------------------------------------|
+| [tmap](https://mtennekes.github.io/tmap/)                  | Mapas temáticos                                             |
+| [ggplot2](https://ggplot2.tidyverse.org/)                  | Cria mapas eleganter usando a Grática de Gráficos           |
+| [ggspatial](https://paleolimbot.github.io/ggspatial/)      | Estrutura de dados espaciais para ggplot2                   |
+| [cartography](http://riatelab.github.io/cartography/docs/) | Cartografia temática                                        |
+| [googleway](http://symbolixau.github.io/googleway/)        | Acessa Google Maps APIs para recuperar dados e traçar mapas |
+| [leaflet](http://rstudio.github.io/leaflet/)               | Cria Web Maps interativos with Leaflet                      |
+| [mapview](https://r-spatial.github.io/mapview/)            | Visualização interativa de dados espaciais em R             |
+| [plotly](https://plotly.com/r/maps/)                       | Crie gráficos interativos da Web por meio de ‘plotly.js’    |
+| [rasterVis](https://oscarperpinan.github.io/rastervis/)    | Métodos de visualização para dados raster                   |
+
+---
+
+background-image: url(img/cover_grammar_graphics.jpg),url(img/ggplot2_structure.png)
+background-size: 160px,630px
+background-position: 7% 55%,85% 55%
+
+# 8.2 Pacotes para produção de mapas
+
+## The Grammar of Graphics (1999)
+
+Os pacotes `ggplot2` e `tmap` implementam uma adaptação da **gramática dos gráficos** em "layers"
+
+<br><br><br><br><br><br><br><br><br><br><br>
+
+Fonte: https://medium.com/tdebeus/think-about-the-grammar-of-graphics-when-improving-your-graphs-18e3744d8d18
+
+---
+
+class: clear
+background-image: url(img/package_ggplot2.png)
+background-size: 400px
+background-position: 50% 50%
+
+---
+
+background-image: url(img/stats_illustrations_ggplot2_obra_prima_pt.png)
+background-size: 550px
+background-position: 85% 80%
+
+# 8.3 Pacote ggplot2
+
+## **ggplot2**
+
+### Integrado ao **tidyverse**, possui uma sintaxe própria
+
+--
+
+### Principal pacote para **visualização de dados** no R
+
+--
+
+### Estrutura:
+`ggplot(...) +`<br>
+`aes(...) +`<br>
+`geom_(...) +`<br>
+`stats_(...) +`<br>
+`coord_(...) +`<br>
+`facet_(...) +`<br>
+`theme_(...)`<br>
+
+Fonte: [@allison_horst](https://twitter.com/allison_horst)
+
+[*] https://ggplot2.tidyverse.org/
+
+---
+
+background-image: url(img/plot_ggplot.gif)
+background-size: 750px
+background-position: 50% 45%
+
+# 8.3 Pacote ggplot2
+
+## **ggplot2**
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+Fonte: https://medium.com/tdebeus/think-about-the-grammar-of-graphics-when-improving-your-graphs-18e3744d8d18
+
+---
+
+background-image: url(img/cheatsheet_ggplot2.png)
+background-size: 600px
+background-position: 50% 50%
+
+# 8.3 Pacote ggplot2
+
+## Data Visualization Cheatsheet
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf
+
+---
+
+background-image: url(img/cover_ggplot2.jpg)
+background-size: 230px
+background-position: 50% 63%
+
+# 8.3 Pacote ggplot2
+
+## Livros
+
+### **ggplot2 (2009, 2016)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://ggplot2-book.org/
+
+---
+
+background-image: url(img/cover_r_graphics_cookbook.jpg)
+background-size: 250px
+background-position: 50% 63%
+
+# 8.3 Pacote ggplot2
+
+## Livros
+
+### **R Graphics Cookbook (2018)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] http://www.cookbook-r.com/Graphs/
+
+---
+
+background-image: url(img/cover_data_visualization_with_r.png)
+background-size: 230px
+background-position: 50% 65%
+
+# 8.3 Pacote ggplot2
+
+## Livros
+
+### **Data Visualization with R (2018)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://rkabacoff.github.io/datavis/
+
+---
+
+background-image: url(img/cover_fundamentals_of_data_visualization.png)
+background-size: 260px
+background-position: 50% 63%
+
+# 8.3 Pacote ggplot2
+
+## Livros
+
+### **Fundamentals of Data Visualization (2019)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://serialmentor.com/dataviz/
+
+---
+
+class: clear
+background-image: url(img/package_tmap.png)
+background-size: 400px
+background-position: 50% 50%
+
+---
+
+background-image: url(img/geo_tmap_article.png)
+background-size: 350px
+background-position: 50% 85%
+
+# 8.4 Pacote tmap
+
+## **tmap**
+
+### Artigo
+> - Tennekes, Martijn. ["tmap: Thematic Maps in R."](https://www.jstatsoft.org/article/view/v084i06) Journal of Statistical Software 84.06 (2018): 1-39.
+
+---
+
+background-image: url(img/geo_tmap_classic.png)
+background-size: 550px
+background-position: 80% 75%
+
+# 8.4 Pacote tmap
+
+## **tmap**
+
+### Sintaxe baseada no **ggplot2** e na **Gramática dos Gráficos**
+
+--
+
+### Dois modos: **plot** (estáticos) e **visualização** (interativos)
+
+--
+
+### Estrutura:
+`tm_shape(...) +`<br>
+`tm_*(...) +`<br>
+`tm_facets(...) +`<br>
+`tm_layout(...)`<br>
+
+`tm_style(...)`<br>
+`tmap_arrange(...)`<br>
+`tm_mode(...)`<br>
+
+[*] https://mtennekes.github.io/tmap/
+
+---
+
+background-image: url(img/cover_geocompr.png)
+background-size: 230px
+background-position: 50% 65%
+
+# 8.4 Pacote tmap
+
+## Livro
+
+### **Geocomputation with R (2019)**
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+[*] https://geocompr.robinlovelace.net/adv-map.html
+
+---
+
+class: inverse, center, middle
+# Mapas vetoriais
+
+---
+
+# 8.5 Mapas vetoriais
+
+## Limite de Rio Claro/SP
+```{r eval=FALSE, warning=FALSE, message=FALSE}
+# rio claro
+rc_2019 <- geobr::read_municipality(code_muni = 3543907, year = 2019)
+rc_2019
+plot(rc_2019$geom, col = "gray", main = NA, axes = TRUE, graticule = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, results='hide', out.width='50%'}
+# rio claro
+rc_2019 <- geobr::read_municipality(code_muni = 3543907, year = 2019)
+plot(rc_2019$geom, col = "gray", main = NA, axes = TRUE, graticule = TRUE)
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## Limite de Rio Claro/SP
+```{r eval=FALSE,warning=FALSE,message=FALSE}
+# rio claro utm
+rc_2019_utm <- geobr::read_municipality(code_muni = 3543907, year = 2019) %>% sf::st_transform(crs = 31983)
+rc_2019_utm
+plot(rc_2019_utm$geom, col = "gray", main = NA, axes = TRUE, graticule = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, results='hide', out.width='50%'}
+# rio claro
+rc_2019_utm <- geobr::read_municipality(code_muni = 3543907, year = 2019) %>% sf::st_transform(crs = 31983)
+plot(rc_2019_utm$geom, col = "gray", main = NA, axes = TRUE, graticule = TRUE)
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## Pontos - nascentes
+```{r eval=FALSE}
+# import points
+rc_spr <- sf::st_read(here::here("03_dados", "vetor", "SP_3543907_NASCENTES.shp"), quiet = TRUE)
+rc_spr
+plot(rc_spr$geometry, col = "blue", main = NA, axes = TRUE, graticule = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, results='hide', out.width='45%'}
+# import points
+rc_spr <- sf::st_read(here::here("03_dados", "vetor", "SP_3543907_NASCENTES.shp"), quiet = TRUE)
+plot(rc_spr$geometry, col = "blue", main = NA, axes = TRUE, graticule = TRUE)
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## Linhas - rios
+```{r eval=FALSE}
+# import lines
+rc_riv <- sf::st_read(here::here("03_dados", "vetor", "SP_3543907_RIOS_SIMPLES.shp"), quiet = TRUE)
+rc_riv
+plot(rc_riv$geometry, col = "steelblue", main = NA, axes = TRUE, graticule = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, results='hide', out.width='45%'}
+# import lines
+rc_riv <- sf::st_read(here::here("03_dados", "vetor", "SP_3543907_RIOS_SIMPLES.shp"), quiet = TRUE)
+plot(rc_riv$geometry, col = "steelblue", main = NA, axes = TRUE, graticule = TRUE)
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## Polígonos - cobertura da terra
+```{r eval=FALSE}
+# import polygons
+rc_use <- sf::st_read(here::here("03_dados", "vetor", "SP_3543907_USO.shp"), quiet = TRUE) %>% sf::st_transform(crs = 31983)
+rc_use
+plot(rc_use$geometry, col = c("blue", "orange", "gray30", "forestgreen", "green"), main = NA, axes = TRUE, graticule = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, results='hide', out.width='45%'}
+# import polygons
+rc_use <- sf::st_read(here::here("03_dados", "vetor", "SP_3543907_USO.shp"), quiet = TRUE) %>% sf::st_transform(crs = 31983)
+plot(rc_use$geometry, col = c("blue", "orange", "gray30", "forestgreen", "green"), main = NA, axes = TRUE, graticule = TRUE)
+```
+
+---
+
+class: clear
+background-image: url(img/package_ggplot2.png)
+background-size: 400px
+background-position: 50% 50%
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Mapa do limite de Rio Claro/SP
+```{r out.width='40%'}
+# rio claro limit
+ggplot() +
+  geom_sf(data = rc_2019_utm)
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Mapa do limite de Rio Claro/SP - cor e preenchimento
+```{r out.width='40%'}
+# rio claro limit color and fill
+ggplot() +
+  geom_sf(data = rc_2019_utm, color = "black", fill = NA)
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Limite e cobertura da terra
+```{r out.width='35%'}
+# rio claro limit fill + land use
+ggplot() +
+  geom_sf(data = rc_2019_utm, color = "black", fill = NA) +
+  geom_sf(data = rc_use)
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Limite e cobertura da terra com cores
+```{r out.width='40%'}
+# rio claro limit fill + land use with colors
+ggplot() +
+  geom_sf(data = rc_2019_utm, color = "black", fill = NA) +
+  geom_sf(data = rc_use, aes(fill = CLASSE_USO), color = NA)
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Limite e cobertura da terra com cores (inverter)
+```{r out.width='40%'}
+# land use with colors + rio claro limit fill
+ggplot() +
+  geom_sf(data = rc_use, aes(fill = CLASSE_USO), color = NA) +
+  geom_sf(data = rc_2019_utm, color = "black", fill = NA) 
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Definir cores para as classes
+```{r out.width='40%'}
+# land use and choose colors + rio claro limit fill 
+ggplot() +
+  geom_sf(data = rc_use, aes(fill = CLASSE_USO), color = NA) +
+  geom_sf(data = rc_2019_utm, color = "black", fill = NA) +
+  scale_fill_manual(values = c("blue", "orange", "gray30", "forestgreen", "green"))
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Mudar o CRS (Sistema de Coordenadas)
+```{r  out.width='35%'}
+# land use and choose colors + rio claro limit fill + coords
+ggplot() +
+  geom_sf(data = rc_use, aes(fill = CLASSE_USO), color = NA) +
+  geom_sf(data = rc_2019_utm, color = "black", fill = NA) +
+  scale_fill_manual(values = c("blue", "orange", "gray30", "forestgreen", "green")) +
+  coord_sf(datum = 31983)
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Mudar o tema
+```{r out.width='30%'}
+# land use and choose colors + rio claro limit fill + coords + themes
+ggplot() +
+  geom_sf(data = rc_use, aes(fill = CLASSE_USO), color = NA) +
+  geom_sf(data = rc_2019_utm, color = "black", fill = NA) +
+  scale_fill_manual(values = c("blue", "orange", "gray30", "forestgreen", "green")) +
+  coord_sf(datum = 31983) +
+  theme_bw()
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Adicionar barra de escala e norte
+```{r eval=FALSE}
+# land use and choose colors + rio claro limit fill + coords + themes + scalebar + north
+ggplot() +
+  geom_sf(data = rc_use, aes(fill = CLASSE_USO), color = NA) +
+  geom_sf(data = rc_2019_utm, color = "black", fill = NA) +
+  scale_fill_manual(values = c("blue", "orange", "gray30", "forestgreen", "green")) +
+  coord_sf(datum = 31983) +
+  theme_bw() +
+  annotation_scale(location = "br", width_hint = .3) +
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0, "cm"), pad_y = unit(.7, "cm"),
+                         style = north_arrow_fancy_orienteering)
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Adicionar barra de escala e norte
+```{r echo=FALSE,out.width='55%'}
+# land use and choose colors + rio claro limit fill + coords + themes + scalebar + north
+ggplot() +
+  geom_sf(data = rc_use, aes(fill = CLASSE_USO), color = NA) +
+  geom_sf(data = rc_2019_utm, color = "black", fill = NA) +
+  scale_fill_manual(values = c("blue", "orange", "gray30", "forestgreen", "green")) +
+  coord_sf(datum = 31983) +
+  theme_bw() +
+  annotation_scale(location = "br", width_hint = .3) +
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0, "cm"), pad_y = unit(.7, "cm"),
+                         style = north_arrow_fancy_orienteering)
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Add título e nome dos eixos, ângulo das coords e atribuir
+```{r eval=FALSE}
+# land use and choose colors + rio claro limit fill + coords + themes + scalebar + north + names
+map_use_gg <- ggplot() +
+  geom_sf(data = rc_use, aes(fill = CLASSE_USO), color = NA) +
+  geom_sf(data = rc_2019_utm, color = "black", fill = NA) +
+  scale_fill_manual(values = c("blue", "orange", "gray30", "forestgreen", "green")) +
+  coord_sf(datum = 31983) +
+  theme_bw() +
+  annotation_scale(location = "br", width_hint = .3) +
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0, "cm"), pad_y = unit(.7, "cm"),
+                         style = north_arrow_fancy_orienteering) +
+  labs(x = "Longitude", y = "Latitude", title = "Cobertura da terra Rio Claro/SP (2015)", fill = "Legenda") +
+  theme(legend.position = c(.18,.18),
+        legend.box.background = element_rect(colour = "black"),
+        axis.text.y = element_text(angle = 90, hjust = .5))
+map_use_gg
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Add título e nome dos eixos, ângulo das coords e atribuir
+```{r echo=FALSE,out.width='55%'}
+# land use and choose colors + rio claro limit fill + coords + themes + scalebar + north + names
+map_use_gg <- ggplot() +
+  geom_sf(data = rc_use, aes(fill = CLASSE_USO), color = NA) +
+  geom_sf(data = rc_2019_utm, color = "black", fill = NA) +
+  scale_fill_manual(values = c("blue", "orange", "gray30", "forestgreen", "green")) +
+  coord_sf(datum = 31983) +
+  theme_bw() +
+  annotation_scale(location = "br", width_hint = .3) +
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0, "cm"), pad_y = unit(.7, "cm"),
+                         style = north_arrow_fancy_orienteering) +
+  labs(x = "Longitude", y = "Latitude", title = "Cobertura da terra Rio Claro/SP (2015)", fill = "Legenda") +
+  theme(legend.position = c(.18,.18),
+        legend.box.background = element_rect(colour = "black"),
+        axis.text.y = element_text(angle = 90, hjust = .5))
+map_use_gg
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Nascentes
+```{r eval=FALSE}
+# springs 
+ggplot() +
+  geom_sf(data = rc_2019_utm, color = "black", fill = "gray") +
+  geom_sf(data = rc_spr, shape = 20, color = "blue") +
+  coord_sf(datum = 31983) +
+  theme_bw() +
+  annotation_scale(location = "br", width_hint = .3) +
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0, "cm"), pad_y = unit(.7, "cm"),
+                         style = north_arrow_fancy_orienteering) +
+  labs(x = "Longitude", y = "Latitude", title = "Nascentes Rio Claro/SP (2015)") +
+  theme(legend.position = c(.18,.18),
+        legend.box.background = element_rect(colour = "black"),
+        axis.text.y = element_text(angle = 90, hjust = .5))
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Nascentes
+```{r echo=FALSE,out.width='50%'}
+# springs 
+ggplot() +
+  geom_sf(data = rc_2019_utm, color = "black", fill = "gray") +
+  geom_sf(data = rc_spr, shape = 20, color = "blue") +
+  coord_sf(datum = 31983) +
+  theme_bw() +
+  annotation_scale(location = "br", width_hint = .3) +
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0, "cm"), pad_y = unit(.7, "cm"),
+                         style = north_arrow_fancy_orienteering) +
+  labs(x = "Longitude", y = "Latitude", title = "Nascentes Rio Claro/SP (2015)") +
+  theme(legend.position = c(.18,.18),
+        legend.box.background = element_rect(colour = "black"),
+        axis.text.y = element_text(angle = 90, hjust = .5))
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Rios
+```{r eval=FALSE}
+# rivers
+ggplot() +
+  geom_sf(data = rc_2019_utm, color = "black", fill = "gray") +
+  geom_sf(data = rc_riv, shape = 20, color = "steelblue") +
+  coord_sf(datum = 31983) +
+  theme_bw() +
+  annotation_scale(location = "br", width_hint = .3) +
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0, "cm"), pad_y = unit(.7, "cm"),
+                         style = north_arrow_fancy_orienteering) +
+  labs(x = "Longitude", y = "Latitude", title = "Rios Rio Claro/SP (2015)") +
+  theme(legend.position = c(.18,.18),
+        legend.box.background = element_rect(colour = "black"),
+        axis.text.y = element_text(angle = 90, hjust = .5))
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## ggplot2
+
+### Rios
+```{r echo=FALSE,out.width='50%'}
+# rivers
+ggplot() +
+  geom_sf(data = rc_2019_utm, color = "black", fill = "gray") +
+  geom_sf(data = rc_riv, shape = 20, color = "steelblue") +
+  coord_sf(datum = 31983) +
+  theme_bw() +
+  annotation_scale(location = "br", width_hint = .3) +
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0, "cm"), pad_y = unit(.7, "cm"),
+                         style = north_arrow_fancy_orienteering) +
+  labs(x = "Longitude", y = "Latitude", title = "Rios Rio Claro/SP (2015)") +
+  theme(legend.position = c(.18,.18),
+        legend.box.background = element_rect(colour = "black"),
+        axis.text.y = element_text(angle = 90, hjust = .5))
+```
+
+---
+
+class: clear
+background-image: url(img/package_tmap.png)
+background-size: 400px
+background-position: 50% 50%
+
+---
+
+background-image: url(img/geo_tmap_ggplot01.png),url(img/geo_tmap_ggplot02.png)
+background-size: 700px,550px
+background-position: 50% 20%,50% 90%
+
+# 8.5 Mapas vetoriais
+
+## ggplot2 e tmap
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Mapa do limite de Rio Claro/SP
+```{r out.width='40%'}
+# rio claro limit
+tm_shape(rc_2019_utm) +
+  tm_polygons()
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Limite e cobertura da terra
+```{r out.width='35%'}
+# rio claro limit fill + land use
+tm_shape(rc_use) +
+  tm_fill(col = "CLASSE_USO", title = "Legenda") +
+  tm_shape(rc_2019_utm) +
+  tm_borders(lwd = 2, col = "black") 
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Limite e cobertura da terra com cores
+```{r out.width='35%'}
+# rio claro limit fill + land use with colors
+tm_shape(rc_use) +
+  tm_fill(col = "CLASSE_USO", title = "Legenda") +
+  tm_shape(rc_2019_utm) +
+  tm_borders(lwd = 2, col = "black") 
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Definir cores para as classes
+```{r out.width='35%'}
+# land use and choose colors + rio claro limit fill 
+tm_shape(rc_use) +
+  tm_fill(col = "CLASSE_USO", 
+          pal = c("blue", "orange", "gray30", "forestgreen", "green"), title = "Legenda") +
+  tm_shape(rc_2019_utm) +
+  tm_borders(lwd = 2, col = "black")
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Add coordenadas
+```{r out.width='30%'}
+# land use and choose colors + rio claro limit fill + coords
+tm_shape(rc_use) +
+  tm_fill(col = "CLASSE_USO", 
+          pal = c("blue", "orange", "gray30", "forestgreen", "green"), title = "Legenda") +
+  tm_shape(rc_2019_utm) +
+  tm_borders(lwd = 2, col = "black") +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90))
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Adicionar barra de escala e norte
+```{r eval=FALSE}
+# land use and choose colors + rio claro limit fill + coords + themes + scalebar + north
+tm_shape(rc_use) +
+  tm_fill(col = "CLASSE_USO", 
+          pal = c("blue", "orange", "gray30", "forestgreen", "green"), title = "Legenda") +
+  tm_shape(rc_2019_utm) +
+  tm_borders(lwd = 2, col = "black") +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar()
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Adicionar barra de escala e norte
+```{r echo=FALSE, out.width='50%'}
+# land use and choose colors + rio claro limit fill + coords + themes + scalebar + north
+tm_shape(rc_use) +
+  tm_fill(col = "CLASSE_USO", 
+          pal = c("blue", "orange", "gray30", "forestgreen", "green"), title = "Legenda") +
+  tm_shape(rc_2019_utm) +
+  tm_borders(lwd = 2, col = "black") +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar()
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Add título, nome dos eixos e atribuir a um objeto
+```{r eval=FALSE}
+# land use and choose colors + rio claro limit fill + coords + themes + scalebar + north + names
+map_use_tmap <- tm_shape(rc_use) +
+  tm_fill(col = "CLASSE_USO", 
+          pal = c("blue", "orange", "gray30", "forestgreen", "green"), title = "Legenda") +
+  tm_shape(rc_2019_utm) +
+  tm_borders(lwd = 2, col = "black") +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(main.title = "Cobertura da terra Rio Claro/SP (2015)")
+map_use_tmap
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Add título, nome dos eixos e atribuir a um objeto
+```{r echo=FALSE, out.width='55%'}
+# land use and choose colors + rio claro limit fill + coords + themes + scalebar + north + names
+map_use_tmap <- tm_shape(rc_use) +
+  tm_fill(col = "CLASSE_USO", 
+          pal = c("blue", "orange", "gray30", "forestgreen", "green"), title = "Legenda") +
+  tm_shape(rc_2019_utm) +
+  tm_borders(lwd = 2, col = "black") +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(main.title = "Cobertura da terra Rio Claro/SP (2015)")
+map_use_tmap
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Nascentes
+```{r eval=FALSE}
+# springs 
+tm_shape(rc_2019_utm) +
+  tm_polygons() +
+  tm_shape(rc_spr) +
+  tm_bubbles(col = "HIDRO", pal = "blue",
+             size = .2, alpha = .5) +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(main.title = "Nascentes Rio Claro/SP (2015)")
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Nascentes
+```{r echo=FALSE,out.width='50%'}
+# springs 
+tm_shape(rc_2019_utm) +
+  tm_polygons() +
+  tm_shape(rc_spr) +
+  tm_bubbles(col = "HIDRO", pal = "blue",
+             size = .2, alpha = .5) +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(main.title = "Nascentes Rio Claro/SP (2015)")
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Rios
+```{r eval=FALSE}
+# rivers
+tm_shape(rc_2019_utm) +
+  tm_polygons() +
+  tm_shape(rc_riv) +
+  tm_lines(col = "HIDRO", pal = "steelblue") +
+  tm_grid(lines = FALSE, 
+          labels.format = list(big.mark = ""), 
+          labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(main.title = "Rios Rio Claro/SP (2015)")
+```
+
+---
+
+# 8.5 Mapas vetoriais
+
+## tmap
+
+### Rios
+```{r echo=FALSE,out.width='50%'}
+# rivers
+tm_shape(rc_2019_utm) +
+  tm_polygons() +
+  tm_shape(rc_riv) +
+  tm_lines(col = "HIDRO", pal = "steelblue") +
+  tm_grid(lines = FALSE, 
+          labels.format = list(big.mark = ""), 
+          labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(main.title = "Rios Rio Claro/SP (2015)")
+```
+
+---
+
+class: inverse, center, middle
+# Mapas matriciais
+
+---
+
+# 8.6 Mapas matriciais
+
+## Elevação
+```{r eval=FALSE,warning=FALSE,message=FALSE}
+# import elevation
+elev <- raster::raster(here::here("03_dados", "raster", "srtm_27_17_rc.tif")) %>% 
+  raster::mask(rc_2019)
+elev
+plot(elev, col = viridis::viridis(10))
+```
+
+```{r echo=FALSE, message=FALSE, results='hide', out.width='50%'}
+# import elevation
+elev <- raster::raster(here::here("03_dados", "raster", "srtm_27_17_rc.tif")) %>% 
+  raster::mask(rc_2019)
+plot(elev, col = viridis::viridis(10))
+```
+
+---
+
+class: clear
+background-image: url(img/package_ggplot2.png)
+background-size: 400px
+background-position: 50% 50%
+
+---
+
+# 8.6 Mapas matriciais
+
+## ggplot2
+
+### Transformar o raster em um tibble
+```{r}
+# raster to tibble
+da_elev <- raster::rasterToPoints(elev) %>% 
+  tibble::as_tibble() %>% 
+  dplyr::rename(elev = srtm_27_17_rc)
+head(da_elev)
+```
+
+---
+
+# 8.6 Mapas matriciais
+
+## ggplot2
+```{r eval=FALSE}
+# elevation map
+map_elev_gg <- ggplot() +
+  geom_raster(data = da_elev, aes(x = x, y = y, fill = elev)) +
+  geom_sf(data = rc_2019, color = "black", fill = NA) +
+  scale_fill_gradientn(colors = viridis::viridis(10)) +
+  theme_bw() +
+  annotation_scale(location = "br", width_hint = .3) +
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0, "cm"), pad_y = unit(.7, "cm"),
+                         style = north_arrow_fancy_orienteering) +
+  labs(x = "Longitude", y = "Latitude", title = "Elevação Rio Claro/SP (2007)", fill = "Legenda") +
+  theme(legend.position = c(.18,.18),
+        legend.box.background = element_rect(colour = "black"),
+        axis.text.y = element_text(angle = 90))
+map_elev_gg
+```
+
+---
+
+# 8.6 Mapas matriciais
+
+## ggplot2
+```{r echo=FALSE,out.width='55%'}
+# elevation map
+map_elev_gg <- ggplot() +
+  geom_raster(data = da_elev, aes(x = x, y = y, fill = elev)) +
+  geom_sf(data = rc_2019, color = "black", fill = NA) +
+  scale_fill_gradientn(colors = viridis::viridis(10)) +
+  theme_bw() +
+  annotation_scale(location = "br", width_hint = .3) +
+  annotation_north_arrow(location = "br", which_north = "true", 
+                         pad_x = unit(0, "cm"), pad_y = unit(.7, "cm"),
+                         style = north_arrow_fancy_orienteering) +
+  labs(x = "Longitude", y = "Latitude", title = "Elevação Rio Claro/SP (2007)", fill = "Legenda") +
+  theme(legend.position = c(.18,.18),
+        legend.box.background = element_rect(colour = "black"),
+        axis.text.y = element_text(angle = 90))
+map_elev_gg
+```
+
+---
+
+class: clear
+background-image: url(img/package_tmap.png)
+background-size: 400px
+background-position: 50% 50%
+
+---
+
+# 8.6 Mapas matriciais
+
+## tmap
+```{r eval=FALSE}
+# elevation map
+map_elev_tmap <- tm_shape(elev) +
+  tm_raster(title = "Legenda") +
+  tm_shape(rc_2019) +
+  tm_borders() +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(legend.position = c("left", "bottom"), 
+            main.title = "Elevação Rio Claro/SP (2015)")
+map_elev_tmap
+```
+
+---
+
+# 8.6 Mapas matriciais
+
+## tmap
+```{r echo=FALSE,out.width='55%'}
+# elevation map
+map_elev_tmap <- tm_shape(elev) +
+  tm_raster(title = "Legenda") +
+  tm_shape(rc_2019) +
+  tm_borders() +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(legend.position = c("left", "bottom"), 
+            main.title = "Elevação Rio Claro/SP (2015)")
+map_elev_tmap
+```
+
+---
+
+# 8.6 Mapas matriciais
+
+## tmap
+```{r eval=FALSE}
+# elevation map
+map_elev_tmap <- tm_shape(elev) +
+  tm_raster(pal = wesanderson::wes_palette("Zissou1"), title = "Legenda") +
+  tm_shape(rc_2019) +
+  tm_borders() +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(legend.position = c("left", "bottom"), 
+            main.title = "Elevação Rio Claro/SP (2015)")
+map_elev_tmap
+```
+
+---
+
+# 8.6 Mapas matriciais
+
+## tmap
+```{r echo=FALSE,out.width='55%'}
+# elevation map
+map_elev_tmap <- tm_shape(elev) +
+  tm_raster(pal = wesanderson::wes_palette("Zissou1"), title = "Legenda") +
+  tm_shape(rc_2019) +
+  tm_borders() +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(legend.position = c("left", "bottom"), 
+            main.title = "Elevação Rio Claro/SP (2015)")
+map_elev_tmap
+```
+
+---
+
+# 8.6 Mapas matriciais
+
+## tmap
+```{r eval=FALSE}
+# elevation map
+map_elev_tmap <- tm_shape(elev) +
+  tm_raster(pal = cptcity::cpt(pal = "gmt_GMT_dem4"), 
+            n = 20,
+            title = "Legenda") +
+  tm_shape(rc_2019) +
+  tm_borders() +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(legend.position = c("left", "bottom"), 
+            legend.outside = TRUE,
+            main.title = "Elevação Rio Claro/SP (2015)")
+map_elev_tmap
+```
+
+---
+
+# 8.6 Mapas matriciais
+
+## tmap
+```{r echo=FALSE,out.width='55%'}
+# elevation map
+map_elev_tmap <- tm_shape(elev) +
+  tm_raster(pal = cptcity::cpt(pal = "gmt_GMT_dem4"), 
+            n = 20,
+            title = "Legenda") +
+  tm_shape(rc_2019) +
+  tm_borders() +
+  tm_grid(lines = FALSE, labels.format = list(big.mark = ""), labels.rot = c(0, 90)) +
+  tm_compass() +
+  tm_scale_bar() +
+  tm_xlab("Longitude") +
+  tm_ylab("Latitude") +
+  tm_layout(legend.position = c("left", "bottom"), 
+            legend.outside = TRUE,
+            main.title = "Elevação Rio Claro/SP (2015)")
+map_elev_tmap
+```
+
+---
+
+# 8.7 Mapas estáticos
+
+## Foram os mapas que vimos até o momento
+
+--
+
+## Existe duas formas de mapas não estáticos: animados e interativos
+
+--
+
+## **Mapas animados** são utilizados para entender a mudanças espacial no tempo
+
+--
+
+## **Mapas interativos**  são utilizados quando precisamos interagir com algo
+
+
+---
+
+# 8.8 Mapas animados
+
+## Mudança dos estados do Brasil ao longo do tempo
+```{r eval=FALSE}
+# download
+year <- geobr::list_geobr()[3, 3] %>% 
+  dplyr::pull() %>% 
+  stringr::str_split(", ", simplify = TRUE) %>% 
+  as.character()
+year
+
+br <- NULL
+
+for(i in year){
+  
+  br <- geobr::read_state("all", i) %>% 
+    dplyr::mutate(year = i) %>% 
+    dplyr::bind_rows(br, .)
+  
+}
+
+br$year %>% table
+```
+
+---
+
+background-image: url(img/geo_br_years.gif)
+background-size: 300px
+background-position: 50% 90%
+
+# 8.8 Mapas animados
+
+## Mudança dos estados do Brasil ao longo do tempo
+```{r eval=FALSE}
+# create facet
+br_years <- tm_shape(br) + 
+  tm_polygons() + 
+  tm_facets(along = "year", free.coords = FALSE)
+
+# export
+tmap_animation(br_years, filename = here::here("03_dados", "mapas", "geo_br_years.gif"), delay = 25)
+```
+
+---
+
+# 8.9 Mapas interativos
+
+## Mapas anteriores
+```{r echo=FALSE, eval=FALSE, message=FALSE, out.width='50%'}
+# change plot tmap
+tmap_mode("view")
+map_use_tmap
+```
+
+---
+
+# 8.9 Mapas interativos
+
+## Mapas anteriores
+```{r echo=FALSE, eval=FALSE, message=FALSE, out.width='50%'}
+# change plot tmap
+tmap_mode("view")
+map_elev_tmap
+```
+
+---
+
+# 8.10 Exportar mapas
+
+## ggplot2
+
+### Exportar
+```{r eval=FALSE}
+# export
+ggsave(map_use_gg, 
+       filename = "map_rio_claro_land_use_gg.png",
+       path = here::here("03_dados", "mapas"),
+       width = 20, 
+       height = 20, 
+       units = "cm", 
+       dpi = 300)
+```
+
+---
+
+# 8.10 Exportar mapas
+
+## ggplot2
+
+### Exportar
+```{r eval=FALSE}
+# export
+ggsave(map_elev_gg, 
+       filename = "map_rio_claro_elevation_gg.png",
+       path = here::here("03_dados", "mapas"),
+       width = 20, 
+       height = 20, 
+       units = "cm", 
+       dpi = 300)
+```
+
+---
+
+# 8.10 Exportar mapas
+
+## tmap
+
+### Exportar
+```{r eval=FALSE}
+# export
+tmap_save(map_use_tmap, 
+          filename = here::here("03_dados", "mapas", "map_rio_claro_land_use_tmap.png"),
+          width = 20, 
+          height = 20, 
+          units = "cm", 
+          dpi = 300)
+```
+
+---
+
+# 8.10 Exportar mapas
+
+## tmap
+
+### Exportar
+```{r eval=FALSE}
+# export
+tmap_save(map_elev_tmap, 
+          filename = here::here("03_dados", "mapas", "map_rio_claro_elevation_tmap.png"),
+          width = 20, 
+          height = 20, 
+          units = "cm", 
+          dpi = 300)
+```
+
+---
+
+class: inverse, center, middle
+# Gostaria de agradecer a paciência e confiânça `r icon::fa_grin_beam_sweat()`
+
+---
+
+class: clear, middle
+
+<br><br><br>
+
+## Maurício Vancine
+
+<br>
+
+Contatos:
+
+<br>
+`r icon::fa_envelope(colour = "#0000ee")` [mauricio.vancine@gmail.com]()
+<br>
+`r icon::fa_twitter(colour = "#0000ee")` [@mauriciovancine](https://twitter.com/mauriciovancine)
+<br>
+`r icon::fa_github(colour = "#0000ee")` [mauriciovancine](https://mauriciovancine.netlify.com/)
+<br>
+`r icon::fa_link(colour = "#0000ee")` [mauriciovancine.netlify.com](https://mauriciovancine.netlify.com/)
+
+<br><br><br>
+
+Slides criados via pacote [xaringan](https://github.com/yihui/xaringan) e tema [Metropolis](https://github.com/pat-s/xaringan-metropolis)
